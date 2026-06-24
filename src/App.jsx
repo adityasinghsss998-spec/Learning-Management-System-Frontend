@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Catalog from "./pages/Catalog";
 import Dashboard from "./pages/Dashboard";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 function Navbar() {
     const { user, isAuthenticated, logout } = useAuth();
 
@@ -62,7 +62,11 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/catalog" element={<Catalog />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
+                } />
             </Routes>
         </BrowserRouter>
     );
