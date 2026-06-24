@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Catalog from "./pages/Catalog";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CourseDetail from "./pages/Coursedetail";
 function Navbar() {
     const { user, isAuthenticated, logout } = useAuth();
 
@@ -58,6 +59,7 @@ function App() {
         <BrowserRouter>
             <Navbar />
             <Routes>
+                <Route path="/courses/:id" element={<CourseDetail />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

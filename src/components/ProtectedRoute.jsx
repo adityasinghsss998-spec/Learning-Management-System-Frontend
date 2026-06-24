@@ -1,8 +1,8 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom';
-import {useAUth} from '../hooks/useAuth';
+import {useAuth} from '../hooks/useAuth';
 function ProtectedRoute({children,allowedRoles}) {
-  const {user,isAuthenticated,loading}=useAUth();
+  const {user,isAuthenticated,loading}=useAuth();
   if(loading){
     return (
       <div className='flex h-screen items-center justify-center bg-slate-50'>
