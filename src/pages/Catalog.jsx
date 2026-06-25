@@ -1,35 +1,36 @@
-import React from "react";
 import { useState } from "react";
-import {useQuery} from "@tanstack/react-query";
-import {Link} from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import api from "../api/axios";
 
 function Catalog() {
-    const [search,setsearch]=useState("");
-    const [category,setcategory]=useState("");
+    const [search, setSearch] = useState("");
+    const [category, setCategory] = useState("");
+    const [level, setLevel] = useState("");
+    const [sort, setSort] = useState("");
 
-    const {data:courses,isLoading,error}=useQuery({
-        queryKey:["courses",search,category],
-        queryFn:async()=>{
-            const params={};
-            if(search) params.search=search;
-            if(category) params.category=category;
-            
-            const response=await api.get("/courses",{params});
-            return response.data.data;
-        }
-    })
-    console.log("BACKEND DATA:", courses);
+    const { data: courses, isLoading, error } = useQuery({
+        queryKey: ["courses", search, category, level, sort],
+        queryFn: async () => {
+            const params = {};
+            if (search) params.search = search;
+            if (category) params.category = category;
+            if (level) params.level = level;
+            if (sort) params.sort = sort;
 
+            const res = await api.get("/courses", { params });
+            return res.data.data;
+        },
+    });
 
     return (
-       <div className="min-h-screen bg-slate-50 px-6 py-10">
-        <div className="mx-auto max-w-6xl">
+        <div className="min-h-screen bg-slate-50 px-6 py-10">
+            <div className="mx-auto max-w-6xl">
                 <h1 className="mb-6 text-3xl font-bold text-slate-800">
                     Course Catalog
                 </h1>
 
-               <div className="mb-8 flex flex-wrap gap-3">
+                <div className="mb-8 flex flex-wrap gap-3">
                     <input
                         type="text"
                         value={search}
@@ -37,6 +38,7 @@ function Catalog() {
                         placeholder="Search courses..."
                         className="flex-1 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:border-indigo-500"
                     />
+
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
@@ -49,22 +51,42 @@ function Catalog() {
                         <option value="marketing">Marketing</option>
                         <option value="other">Other</option>
                     </select>
-               </div>  
-               {isLoading && (
-                   <p className="text-slate-400">Loading courses...</p>
-               )}
 
-               {error && (
+                    <select
+                        value={level}
+                        onChange={(e) => setLevel(e.target.value)}
+                        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:border-indigo-500"
+                    >
+                        <option value="">All levels</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+
+                    <select
+                        value={sort}
+                        onChange={(e) => setSort(e.target.value)}
+                        className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm outline-none focus:border-indigo-500"
+                    >
+                        <option value="">Sort: Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="popular">Most Popular</option>
+                    </select>
+                </div>
+
+                {isLoading && <p className="text-slate-400">Loading courses...</p>}
+                {error && (
                     <p className="text-red-500">
                         Failed to load courses. Please try again.
                     </p>
                 )}
-
                 {courses && courses.length === 0 && (
                     <p className="text-slate-400">No courses found.</p>
                 )}
 
-             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {courses?.map((course) => (
                         <Link
                             key={course.id}
@@ -77,9 +99,14 @@ function Catalog() {
                                 </span>
                             </div>
                             <div className="p-4">
-                                <h3 className="mb-1 font-semibold text-slate-800">
-                                    {course.title}
-                                </h3>
+                                <div className="mb-1 flex items-center justify-between">
+                                    <h3 className="font-semibold text-slate-800">
+                                        {course.title}
+                                    </h3>
+                                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs capitalize text-slate-500">
+                                        {course.level}
+                                    </span>
+                                </div>
                                 <p className="mb-3 text-sm text-slate-500">
                                     by {course.instructorName}
                                 </p>
