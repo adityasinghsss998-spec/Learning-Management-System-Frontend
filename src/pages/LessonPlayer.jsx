@@ -11,13 +11,14 @@ function LessonPlayer() {
 
     const [activeLesson, setActiveLesson] = useState(null);
 
-    const { data: course, isLoading: courseLoading } = useQuery({
-        queryKey: ["course", courseId],
-        queryFn: async () => {
-            const res = await api.get(`/courses/${courseId}`);
-            return res.data || res.data.data;
-        },
-    });
+  const { data: course, isLoading: courseLoading } = useQuery({
+    queryKey: ["course", courseId],
+    queryFn: async () => {
+        const res = await api.get(`/courses/${courseId}`);
+        return res.data.data;
+    },
+    enabled: !!courseId,
+});
 
     const { data: enrollments, isLoading: enrollmentsLoading } = useQuery({
         queryKey: ["myEnrollments"],
