@@ -7,6 +7,7 @@ import Catalog from "./pages/Catalog";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CourseDetail from "./pages/Coursedetail";
+import LessonPlayer from "./pages/LessonPlayer";
 function Navbar() {
     const { user, isAuthenticated, logout } = useAuth();
 
@@ -59,6 +60,14 @@ function App() {
         <BrowserRouter>
             <Navbar />
             <Routes>
+                <Route
+                  path="/learn/:courseId"
+                  element={
+                      <ProtectedRoute>
+                           <LessonPlayer />
+                      </ProtectedRoute>
+                  }
+               />
                 <Route path="/courses/:id" element={<CourseDetail />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
