@@ -1,7 +1,7 @@
 function LessonSidebar({ sections, completedLessonIds, activeLessonId, onSelectLesson }) {
     return (
         <div className="flex flex-col gap-4 overflow-y-auto">
-            {sections.map((section) => (
+            {sections?.map((section) => (
                 <div key={section._id}>
                     <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
                         {section.title}
