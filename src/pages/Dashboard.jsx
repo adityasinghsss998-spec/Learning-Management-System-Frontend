@@ -2,20 +2,27 @@ import { useQuery, useQueries } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import api from "../api/axios";
-
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 function Dashboard() {
     const { user } = useAuth();
-
-    // 1. Fetch the user's enrollments (with our bulletproof data extraction)
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (user?.role === "instructor") {
+            navigate("/instructor", { replace: true });
+        }
+    }, [user]);
     const { data: enrollments, isLoading: enrollmentsLoading } = useQuery({
         queryKey: ["myEnrollments"],
         queryFn: async () => {
             const res = await api.get("/enrollments/my");
-            return res.data.data || res.data || []; // <-- FIX #2
+            return res.data.data || res.data || []; 
         },
     });
 
-    // 2. Fetch the course details for each enrollment
+
+    
     const courseQueries = useQueries({
         queries: (enrollments || []).map((enrollment) => ({
             queryKey: ["course", enrollment.courseId],
@@ -95,7 +102,7 @@ function Dashboard() {
                         {enrolledCourses.map(({ enrollment, course }) => (
                             <Link
                                 key={enrollment._id}
-                                to={`/learn/${course._id}`} // <-- FIX #3: Changed .id to ._id
+                                to={`/learn/${course._id}`} 
                                 className="flex items-center gap-4 rounded-xl bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
                             >
                                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600">
@@ -121,7 +128,7 @@ function Dashboard() {
                                     </div>
                                 </div>
 
-                                {/* FIX #1: Restored the <a tag */}
+                                
                                 {enrollment.certificateUrl && (
                                     <a
                                         href={enrollment.certificateUrl}

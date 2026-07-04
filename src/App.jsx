@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CourseDetail from "./pages/Coursedetail";
 import LessonPlayer from "./pages/LessonPlayer";
 import ManageCourse from "./pages/ManageCourse";
+import InstructorDashboard from "./pages/InstructorDashboard";
 function Navbar() {
     const { user, isAuthenticated, logout } = useAuth();
 
@@ -26,7 +27,15 @@ function Navbar() {
                         Dashboard
                     </Link>
                 )}
+
+              {isAuthenticated && user?.role === "instructor" && (
+                         <Link to="/instructor" className="...">
+                          Teach
+                       </Link>
+                  )}
             </div>
+
+           
 
             <div className="flex items-center gap-4">
                 {isAuthenticated ? (
@@ -52,6 +61,8 @@ function Navbar() {
                     </>
                 )}
             </div>
+
+           
         </nav>
     );
 }
@@ -87,6 +98,15 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                     path="/instructor"
+                     element={
+                        <ProtectedRoute>
+                            <InstructorDashboard />
+                        </ProtectedRoute>
+                     }
+                />
+                
 
             </Routes>
         </BrowserRouter>

@@ -1,47 +1,60 @@
-import {useState, useEffect} from 'react';
-import {useAuth} from '../hooks/useAuth';
-import {Link} from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api/axios';
-
-import {useQuery,useMutations,useQueryClient} from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 function InstructorDashboard() {
     const queryClient = useQueryClient();
-    const [showCreateForm,setShowCreateForm] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
+    const [createError, setCreateError] = useState("");
 
-    const [title,setTitle] = useState("");
-    const [description,setDescription] = useState("");
-    const [price,setPrice] = useState(0);
-    const [category,setCategory] = useState("");
-    const [level,setLevel] = useState("");
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [price, setPrice] = useState(0);
+    const [category, setCategory] = useState("development");
+    const [level, setLevel] = useState("beginner");
 
-    const {data:courses,isLoading}=useQuery({
-        queryKey:["myCourses"],
-        queryFn:async()=>{
-            const response=await api.get("/courses/my");
-            return response.data.data || response.data;
+    const { data: courses, isLoading } = useQuery({
+        queryKey: ["myCourses"],
+        queryFn: async () => {
+            const res = await api.get("/courses/my");
+            return res.data.data || res.data;
         }
-    })
+    });
 
-    const {mutate:createCourse,isPending:isCreating}=useMutation({
-        mutationFn:async ()=>{
-            const res=await api.post("/courses",{
+    const { mutate: createCourse, isPending: isCreating } = useMutation({
+        mutationFn: async () => {
+            const res = await api.post("/courses", {
                 title,
                 description,
-                price:Number(price),
+                price: Number(price),
                 category,
-                level
-            })
-            return res.data || res.data.data;
+                level,
+            });
+            return res.data.data || res.data;
         },
-        onSuccess:()=>{
-            queryClient.invalidateQueries({queryKey:["myCourses"]});
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["myCourses"] });
             setTitle("");
             setDescription("");
             setPrice(0);
+            setCreateError("");
             setShowCreateForm(false);
-        }
-    })
+        },
+        onError: (err) => {
+            setCreateError(err.response?.data?.message || "Failed to create course");
+        },
+    });
+
+    const { mutate: togglePublish } = useMutation({
+        mutationFn: async (courseId) => {
+            const res = await api.patch(`/courses/${courseId}/publish`);
+            return res.data.data || res.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["myCourses"] });
+        },
+    });
 
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
@@ -112,6 +125,11 @@ function InstructorDashboard() {
                                 <option value="advanced">Advanced</option>
                             </select>
                         </div>
+
+                        {createError && (
+                            <p className="text-sm text-red-500">{createError}</p>
+                        )}
+
                         <button
                             type="submit"
                             disabled={isCreating}
@@ -135,8 +153,8 @@ function InstructorDashboard() {
                                     {course.title}
                                 </p>
                                 <p className="text-sm text-slate-400">
-                                    {course.totalSections} sections ·{" "}
-                                    {course.totalLessons} lessons ·{" "}
+                                    {course.sections?.length || 0} sections ·{" "}
+                                    {course.sections?.reduce((acc, s) => acc + s.lessons.length, 0) || 0} lessons ·{" "}
                                     {course.price === 0 ? "Free" : `₹${course.price}`}
                                 </p>
                             </div>
@@ -170,4 +188,5 @@ function InstructorDashboard() {
         </div>
     );
 }
+
 export default InstructorDashboard;

@@ -25,7 +25,12 @@ function Register() {
 
             const { data } = await api.post("/auth/login", { email, password });
             login(data.user, data.accessToken, data.refreshToken);
-            navigate("/dashboard");
+            if(data.user.role==="instructor"){
+                navigate("/instructor");
+            }
+            else {
+                navigate("/dashboard");
+            }
         } catch (err) {
             setError(err.response?.data?.message || "Registration failed");
         } finally {

@@ -5,6 +5,7 @@ import api from "../api/axios";
 
 function ManageCourse() {
     const { id } = useParams();
+    console.log("Course ID:", id); // Debugging line
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
@@ -89,8 +90,8 @@ function ManageCourse() {
                     ← Back to my courses
                 </button>
 
-                <h1 className="text-3xl font-bold text-slate-800">{course.title}</h1>
-                <p className="mt-2 text-slate-500">{course.description}</p>
+                <h1 className="text-3xl font-bold text-slate-800">{course?.title}</h1>
+                <p className="mt-2 text-slate-500">{course?.description}</p>
 
                 <div className="mt-8">
                     <form
@@ -119,7 +120,7 @@ function ManageCourse() {
                 </div>
 
                 <div className="mt-6 flex flex-col gap-4">
-                    {course.sections?.map((section) => (
+                    {course?.sections?.map((section) => (
                         <div
                             key={section._id}
                             className="rounded-xl border border-slate-200 bg-white p-5"
@@ -127,7 +128,7 @@ function ManageCourse() {
                             <p className="font-medium text-slate-800">{section.title}</p>
 
                             <div className="mt-3 flex flex-col gap-1">
-                                {section.lessons.map((lesson) => (
+                                {section?.lessons?.map((lesson) => (
                                     <div
                                         key={lesson._id}
                                         className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm"
