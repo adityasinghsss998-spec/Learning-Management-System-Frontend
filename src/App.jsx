@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CourseDetail from "./pages/Coursedetail";
 import LessonPlayer from "./pages/LessonPlayer";
+import ManageCourse from "./pages/ManageCourse";
 function Navbar() {
     const { user, isAuthenticated, logout } = useAuth();
 
@@ -78,6 +79,15 @@ function App() {
                         <Dashboard />
                     </ProtectedRoute>
                 } />
+                <Route
+                    path="/instructor/courses/:id"
+                    element={
+                        <ProtectedRoute>
+                            <ManageCourse />
+                        </ProtectedRoute>
+                    }
+                />
+
             </Routes>
         </BrowserRouter>
     );
