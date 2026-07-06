@@ -96,6 +96,13 @@ function LessonPlayer() {
                 >
                     ← Back to Dashboard
                 </button>
+                <br />
+                <button
+                    onClick={() => navigate(`/live/${courseId}`)}
+                    className="mb-4 ml-auto text-sm text-indigo-600 hover:underline"
+                   >
+                     Join Live Session →
+                </button>
                 <h2 className="mb-4 font-semibold text-slate-800">{course.title}</h2>
                 <LessonSidebar
                     sections={course.sections}

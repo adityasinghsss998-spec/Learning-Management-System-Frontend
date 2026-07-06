@@ -2,8 +2,19 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
+import { useAuth } from '../hooks/useAuth';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 function InstructorDashboard() {
+      const { user } = useAuth();
+      const navigate = useNavigate();
+      useEffect(() => {
+            if (user?.role === "student") {
+                navigate("/dashboard", { replace: true });
+            }
+        }, [user]);
+
+
     const queryClient = useQueryClient();
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [createError, setCreateError] = useState("");
@@ -58,7 +69,7 @@ function InstructorDashboard() {
 
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
-            <div className="mx-auto max-w-5xl">
+            <div className="mx-auto max-w-7xl">
                 <div className="flex items-center justify-between">
                     <h1 className="text-3xl font-bold text-slate-800">
                         Your Courses

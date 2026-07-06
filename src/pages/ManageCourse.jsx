@@ -80,6 +80,21 @@ function ManageCourse() {
         );
     }
 
+    if (courseLoading) {
+    return (
+        <div className="flex h-screen items-center justify-center bg-slate-50">
+            <p className="text-slate-400">Loading course...</p>
+        </div>
+    );
+}
+
+if (!course) {
+    return (
+        <div className="flex h-screen items-center justify-center bg-slate-50">
+            <p className="text-slate-400">Course not found.</p>
+        </div>
+    );
+}
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
             <div className="mx-auto max-w-3xl">

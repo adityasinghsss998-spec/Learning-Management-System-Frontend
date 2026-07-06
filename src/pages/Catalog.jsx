@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import api from "../api/axios";
+import { motion } from "framer-motion";
 
 function Catalog() {
     const [search, setSearch] = useState("");
@@ -25,10 +26,13 @@ function Catalog() {
 
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
-            <div className="mx-auto max-w-6xl">
-                <h1 className="mb-6 text-3xl font-bold text-slate-800">
-                    Course Catalog
-                </h1>
+            <div className="mx-auto max-w-7xl">
+                <div className="mb-8">
+            <h1 className="text-3xl font-bold text-slate-800">Course Catalog</h1>
+                <p className="mt-2 text-slate-500">
+                   Browse {courses?.length || ""} courses across development, design, and more.
+                   </p>
+               </div>
 
                 <div className="mb-8 flex flex-wrap gap-3">
                     <input
@@ -87,12 +91,20 @@ function Catalog() {
                 )}
 
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {courses?.map((course) => (
+                    {courses?.map((course,index) => (
+
+                 <motion.div
+                         key={course.id}
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                         transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
                         <Link
                             key={course.id}
                             to={`/courses/${course.id}`}
                             className="overflow-hidden rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md"
                         >
+                            
                             <div className="flex h-32 items-center justify-center bg-gradient-to-br from-indigo-400 to-indigo-600">
                                 <span className="text-sm font-medium text-white">
                                     {course.category}
@@ -120,6 +132,7 @@ function Catalog() {
                                 </div>
                             </div>
                         </Link>
+                        </motion.div>
                     ))}
                 </div>
             </div>

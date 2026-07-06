@@ -55,10 +55,19 @@ function Dashboard() {
 
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
-            <div className="mx-auto max-w-5xl">
-                <h1 className="text-3xl font-bold text-slate-800">
-                    Welcome back, {user?.name}
-                </h1>
+            <div className="mx-auto max-w-7xl">
+                <div className="mb-6">
+                     <p className="text-sm text-slate-400">
+                     {new Date().toLocaleDateString("en-IN", {
+                     weekday: "long",
+                     month: "long",
+                     day: "numeric",
+              })}
+            </p>
+          <h1 className="text-3xl font-bold text-slate-800">
+                 Welcome back, {user?.name} 👋
+           </h1>
+        </div>
 
                 <div className="mt-6 grid grid-cols-3 gap-4">
                     <div className="rounded-xl bg-indigo-50 p-5">

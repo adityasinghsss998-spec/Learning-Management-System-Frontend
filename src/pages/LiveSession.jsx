@@ -22,7 +22,7 @@ function LiveSession() {
 
         socket.on("connect", () => {
             setIsConnected(true);
-            socket.emit("join:room", { room: courseId, userId: user.id });
+            socket.emit("join:room", { room: courseId, userId: user.name });
         });
 
         socket.on("disconnect", () => {
@@ -40,7 +40,7 @@ function LiveSession() {
         return () => {
             socket.disconnect();
         };
-    }, [courseId, user.id]);
+    }, [courseId, user.name]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
