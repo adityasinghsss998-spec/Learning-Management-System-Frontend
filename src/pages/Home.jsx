@@ -109,7 +109,11 @@ function HeroBackground() {
 function Home() {
     const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
-
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/dashboard", { replace: true }); 
+        }
+    }, [isAuthenticated, navigate]);
     const { data: courses } = useQuery({
         queryKey: ["courses", "", "", "", "popular"],
         queryFn: async () => {
