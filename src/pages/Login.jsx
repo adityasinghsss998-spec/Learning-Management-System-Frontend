@@ -28,7 +28,11 @@ function Login() {
                 navigate("/dashboard");
             }
         } catch (err) {
-            setError(err.response?.data?.message || "Login failed");
+            if (err.response && err.response.status === 404) {
+                setError("You don't have an account. Please register first.");
+            } else {
+                setError(err.response?.data?.message || "Login failed");
+            }
         } finally {
             setLoading(false);
         }
