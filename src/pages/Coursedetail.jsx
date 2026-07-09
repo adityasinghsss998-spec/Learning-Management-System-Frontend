@@ -38,7 +38,7 @@ function CourseDetail() {
         },
     });
 
-    const { data: enrollments } = useQuery({
+    const { data: enrollments , isLoading: isLoadingEnrollments } = useQuery({
         queryKey: ["myEnrollments"],
         queryFn: async () => {
             const res = await api.get("/enrollments/my");
@@ -66,6 +66,8 @@ function CourseDetail() {
             queryClient.invalidateQueries({ queryKey: ["myEnrollments"] });
         },
     });
+
+    
 
     const { mutate: enrollPaid, isPending: isEnrollingPaid } = useMutation({
         mutationFn: async () => {
@@ -160,7 +162,8 @@ function CourseDetail() {
         }
     };
 
-    const isEnrolling = isEnrollingFree || isEnrollingPaid;
+    
+    const isEnrolling = isEnrollingFree || isEnrollingPaid || isLoadingEnrollments;
 
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
