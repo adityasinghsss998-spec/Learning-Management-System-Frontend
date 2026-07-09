@@ -5,15 +5,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../hooks/useAuth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-function InstructorDashboard() {
-      const { user } = useAuth();
-      const navigate = useNavigate();
-      useEffect(() => {
-            if (user?.role === "student") {
-                navigate("/dashboard", { replace: true });
-            }
-        }, [user]);
 
+function InstructorDashboard() {
+    const { user } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user?.role === "student") {
+            navigate("/dashboard", { replace: true });
+        }
+    }, [user]);
 
     const queryClient = useQueryClient();
     const [showCreateForm, setShowCreateForm] = useState(false);
@@ -24,6 +25,30 @@ function InstructorDashboard() {
     const [price, setPrice] = useState(0);
     const [category, setCategory] = useState("development");
     const [level, setLevel] = useState("beginner");
+
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [generateError, setGenerateError] = useState("");
+
+    const handleGenerateDescription = async () => {
+        if (!title.trim()) {
+            setGenerateError("Enter a course title first");
+            return;
+        }
+        setIsGenerating(true);
+        setGenerateError("");
+        try {
+            const res = await api.post("/ai/describe", {
+                title,
+                topics: category,
+            });
+            const data = res.data.data || res.data;
+            setDescription(data.description);
+        } catch (e) {
+            setGenerateError("AI generation failed — try again");
+        } finally {
+            setIsGenerating(false);
+        }
+    };
 
     const { data: courses, isLoading } = useQuery({
         queryKey: ["myCourses"],
@@ -66,18 +91,7 @@ function InstructorDashboard() {
             queryClient.invalidateQueries({ queryKey: ["myCourses"] });
         },
     });
-   const { mutate: generateDescription, isPending: isGenerating } = useMutation({
-    mutationFn: async () => {
-        const res = await api.post("/ai/describe", {
-            title,
-            topics: category,
-        });
-        return res.data.data;
-    },
-    onSuccess: (data) => {
-        setDescription(data.description);
-    },
-});
+
     return (
         <div className="min-h-screen bg-slate-50 px-6 py-10">
             <div className="mx-auto max-w-7xl">
@@ -109,25 +123,45 @@ function InstructorDashboard() {
                             placeholder="Course title"
                             className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
                         />
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                            placeholder="Course description"
-                            rows={3}
-                            className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                          if (!title) return;
-                          generateDescription();
-                         }}
-                          disabled={isGenerating || !title}
-                          className="mt-1 text-xs text-indigo-600 hover:underline disabled:opacity-40"
-                            >
-                         {isGenerating ? "Generating..." : "✨ Auto-generate from title"}
-                        </button>
+
+                        <div className="flex flex-col gap-1">
+                            <div className="flex items-center justify-between">
+                                <label className="text-xs font-medium text-slate-500">Description</label>
+                                <button
+                                    type="button"
+                                    onClick={handleGenerateDescription}
+                                    disabled={isGenerating || !title.trim()}
+                                    className="flex items-center gap-1.5 rounded-lg bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-100 disabled:opacity-40 transition-colors"
+                                >
+                                    {isGenerating ? (
+                                        <>
+                                            <span className="animate-spin">⟳</span>
+                                            Generating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>✨</span>
+                                            Auto-generate with AI
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                required
+                                placeholder="Describe what students will learn..."
+                                rows={3}
+                                className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                            />
+                            {generateError && (
+                                <p className="text-xs text-red-500">{generateError}</p>
+                            )}
+                            {description && !isGenerating && (
+                                <p className="text-xs text-emerald-600">✓ AI-generated description ready — edit if needed</p>
+                            )}
+                        </div>
+
                         <div className="grid grid-cols-3 gap-3">
                             <input
                                 type="number"

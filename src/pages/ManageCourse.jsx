@@ -80,13 +80,7 @@ function ManageCourse() {
         );
     }
 
-    if (courseLoading) {
-    return (
-        <div className="flex h-screen items-center justify-center bg-slate-50">
-            <p className="text-slate-400">Loading course...</p>
-        </div>
-    );
-}
+    
 
 if (!course) {
     return (
@@ -99,10 +93,11 @@ if (!course) {
         <div className="min-h-screen bg-slate-50 px-6 py-10">
             <div className="mx-auto max-w-3xl">
                 <button
-                    onClick={() => navigate("/instructor")}
-                    className="mb-4 text-sm text-slate-400 hover:text-slate-600"
-                >
-                    ← Back to my courses
+              onClick={() => navigate("/instructor")}
+               className="mb-6 flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-indigo-300 hover:text-indigo-600 hover:shadow"
+                 >
+                <span>←</span>
+                <span>Back to my courses</span>
                 </button>
 
                 <h1 className="text-3xl font-bold text-slate-800">{course?.title}</h1>
@@ -194,12 +189,15 @@ if (!course) {
                                             className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-indigo-500"
                                         />
                                     </div>
+                                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-600 transition hover:border-indigo-500 hover:text-indigo-600">
+                                   <span>⬆ Upload File</span>
                                     <input
                                         type="file"
                                         onChange={(e) => setFile(e.target.files[0])}
                                         required
                                         className="text-sm"
                                     />
+                                    </label>
 
                                     {isUploading && (
                                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
