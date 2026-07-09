@@ -101,22 +101,23 @@ function LessonPlayer() {
     const prevLesson = allLessons[currentLessonIndex - 1];
     const nextLesson = allLessons[currentLessonIndex + 1];
 
-    return (
-        <div className="flex h-screen overflow-hidden bg-slate-900">
-            <div className="flex w-72 flex-shrink-0 flex-col border-r border-slate-800 bg-slate-900">
+return (
+        <div className="flex h-[100dvh] flex-col-reverse overflow-hidden bg-slate-900 md:flex-row">
+            
+            <div className="flex h-[50vh] w-full flex-shrink-0 flex-col border-t border-slate-800 bg-slate-900 md:h-full md:w-72 md:border-t-0 md:border-r">
                 <div className="border-b border-slate-800 p-4">
                     <button
                         onClick={() => navigate("/dashboard")}
-                        className="flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors"
+                        className="flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white"
                     >
                         ← Dashboard
                     </button>
-                    <h2 className="mt-3 text-sm font-semibold text-white leading-snug line-clamp-2">
+                    <h2 className="mt-3 line-clamp-2 text-sm font-semibold leading-snug text-white">
                         {course.title}
                     </h2>
 
                     <div className="mt-3">
-                        <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+                        <div className="mb-1.5 flex items-center justify-between text-xs text-slate-400">
                             <span>{completedLessonIds.length} / {allLessons.length} lessons</span>
                             <span>{enrollment.progressPercent || 0}%</span>
                         </div>
@@ -141,7 +142,7 @@ function LessonPlayer() {
                 <div className="border-t border-slate-800 p-4">
                     <button
                         onClick={() => navigate(`/live/${courseId}`)}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 transition-colors"
+                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-indigo-500"
                     >
                         <span>💬</span>
                         Join Live Session
@@ -149,12 +150,12 @@ function LessonPlayer() {
                 </div>
             </div>
 
-            <div className="flex flex-1 flex-col overflow-hidden">
+            <div className="flex h-[50vh] flex-1 flex-col overflow-hidden bg-slate-950 md:h-full">
                 {enrollment.completed && (
-                    <div className="flex items-center justify-between bg-emerald-900/40 border-b border-emerald-800/50 px-6 py-3">
+                    <div className="flex items-center justify-between border-b border-emerald-800/50 bg-emerald-900/40 px-4 py-3 md:px-6">
                         <div className="flex items-center gap-2">
                             <span>🎉</span>
-                            <p className="text-sm font-medium text-emerald-300">
+                            <p className="text-xs font-medium text-emerald-300 md:text-sm">
                                 Course completed! Your certificate is on its way.
                             </p>
                         </div>
@@ -163,7 +164,7 @@ function LessonPlayer() {
                                 href={enrollment.certificateUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="rounded-lg bg-emerald-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-emerald-500 transition-colors"
+                                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-emerald-500 md:px-4 md:text-sm"
                             >
                                 View Certificate
                             </a>
@@ -171,34 +172,34 @@ function LessonPlayer() {
                     </div>
                 )}
 
-                <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900 px-6 py-3">
+                <div className="flex flex-col gap-3 border-b border-slate-800 bg-slate-900 px-4 py-3 md:flex-row md:items-center md:justify-between md:px-6">
                     <div>
-                        <p className="text-xs text-slate-500 uppercase tracking-wide">
+                        <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 md:text-xs">
                             Lesson {currentLessonIndex + 1} of {allLessons.length}
                         </p>
-                        <h1 className="mt-0.5 text-base font-semibold text-white">
+                        <h1 className="mt-0.5 text-sm font-semibold text-white md:text-base">
                             {activeLesson.title}
                         </h1>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2 md:gap-3">
                         <button
                             onClick={() => prevLesson && setActiveLesson(prevLesson)}
                             disabled={!prevLesson}
-                            className="rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-400 hover:border-slate-500 hover:text-white disabled:opacity-30 transition-colors"
+                            className="rounded-lg border border-slate-700 px-2 py-1.5 text-xs text-slate-400 transition-colors hover:border-slate-500 hover:text-white disabled:opacity-30 md:px-3"
                         >
-                            ← Previous
+                            ← Prev
                         </button>
                         <button
                             onClick={() => markComplete()}
                             disabled={isMarking || isActiveLessonComplete}
-                            className={`rounded-lg px-4 py-1.5 text-xs font-medium transition-colors ${
+                            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors md:px-4 ${
                                 isActiveLessonComplete
-                                    ? "bg-emerald-900/50 text-emerald-400 border border-emerald-800"
+                                    ? "border border-emerald-800 bg-emerald-900/50 text-emerald-400"
                                     : "bg-indigo-600 text-white hover:bg-indigo-500"
                             } disabled:opacity-50`}
                         >
                             {isActiveLessonComplete
-                                ? "✓ Completed"
+                                ? "✓ Done"
                                 : isMarking
                                 ? "Saving..."
                                 : "Mark Complete"}
@@ -206,20 +207,20 @@ function LessonPlayer() {
                         <button
                             onClick={() => nextLesson && setActiveLesson(nextLesson)}
                             disabled={!nextLesson}
-                            className="rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-400 hover:border-slate-500 hover:text-white disabled:opacity-30 transition-colors"
+                            className="rounded-lg border border-slate-700 px-2 py-1.5 text-xs text-slate-400 transition-colors hover:border-slate-500 hover:text-white disabled:opacity-30 md:px-3"
                         >
                             Next →
                         </button>
                     </div>
                 </div>
 
-                <div className="flex-1 overflow-hidden bg-slate-950">
+                <div className="flex-1 overflow-hidden bg-black">
                     {activeLesson?.contentType === "video" ? (
                         <video
                             key={activeLesson._id}
                             src={activeLesson.contentUrl}
                             controls
-                            className="h-full w-full"
+                            className="h-full w-full object-contain"
                         />
                     ) : (
                         <iframe
@@ -231,8 +232,8 @@ function LessonPlayer() {
                     )}
                 </div>
 
-                <div className="border-t border-slate-800 bg-slate-900 px-6 py-3">
-                    <div className="flex items-center justify-between text-xs text-slate-500">
+                <div className="border-t border-slate-800 bg-slate-900 px-4 py-3 md:px-6">
+                    <div className="flex flex-col gap-1 text-[10px] text-slate-500 md:flex-row md:items-center md:justify-between md:text-xs">
                         <span>
                             {activeLesson?.duration
                                 ? `${activeLesson.duration} min · ${activeLesson.contentType}`
