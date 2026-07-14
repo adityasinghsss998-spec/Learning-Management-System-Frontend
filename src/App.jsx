@@ -14,6 +14,7 @@ import ManageCourse from "./pages/ManageCourse";
 import InstructorDashboard from "./pages/InstructorDashboard";
 import LiveSession from "./pages/LiveSession";
 import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 function Navbar() {
     const { user, isAuthenticated, logout } = useAuth();
     const navigate = useNavigate();
@@ -219,6 +220,7 @@ function App() {
                     </Routes>
                 </main>
                 <Footer />
+                <SpeedInsights />
             </div>
         </BrowserRouter>
     );
