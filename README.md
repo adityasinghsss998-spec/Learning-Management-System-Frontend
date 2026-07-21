@@ -9,7 +9,7 @@
 **A production-grade LMS built from scratch on a polyrepo microservices architecture.**  
 Seven independent services. Real-time doubt sessions. AI-powered features. AWS S3 media pipeline. Razorpay payments.
 
-[**Live Demo →**](https://nexus-lms.vercel.app) &nbsp;·&nbsp; [**Backend API**](https://nexus-api.onrender.com/health) &nbsp;·&nbsp; [**Frontend Repo**](https://github.com/yourusername/nexus-frontend)
+[**Live Demo →**](https://learning-management-system-frontend-i277ad506.vercel.app) &nbsp;·&nbsp; [**Backend API**](https://nexus-api.onrender.com/health) &nbsp;·&nbsp; [**Frontend Repo**](https://github.com/yourusername/nexus-frontend)
 
 </div>
 
